@@ -8,14 +8,10 @@ import (
 )
 
 // Ensure interface compliance.
-var _ image.Image = (*FloatNRGBA)(nil)
+var _ image.Image = (*Float64NRGBA)(nil)
 
-const (
-	numChannels = 4
-)
-
-// FloatNRGBA represents an image made up of FloatNRGBA colour information.
-type FloatNRGBA struct {
+// Float64NRGBA represents an image made up of Float64RGBA colour information.
+type Float64NRGBA struct {
 	// Pix holds the image's pixels, in R, G, B, A order. The pixel at
 	// (x, y) starts at Pix[(y-Rect.Min.Y)*Stride + (x-Rect.Min.X)*4].
 	Pix []float64
@@ -25,48 +21,48 @@ type FloatNRGBA struct {
 	Rect image.Rectangle
 }
 
-// NewFloatNRGBA returns a new FloatNRGBAImage image with the given bounds.
-func NewFloatNRGBA(r image.Rectangle, data []float64) *FloatNRGBA {
-	return &FloatNRGBA{
+// NewFloat64NRGBA returns a new Float64NRGBAImage image with the given bounds.
+func NewFloat64NRGBA(r image.Rectangle, data []float64) *Float64NRGBA {
+	return &Float64NRGBA{
 		Pix:    data,
 		Stride: numChannels * r.Dx(),
 		Rect:   r,
 	}
 }
 
-func (f *FloatNRGBA) At(x, y int) color.Color {
-	return f.FloatNRGBAAt(x, y)
+func (f *Float64NRGBA) At(x, y int) color.Color {
+	return f.Float64NRGBAAt(x, y)
 }
 
-func (f *FloatNRGBA) Bounds() image.Rectangle {
+func (f *Float64NRGBA) Bounds() image.Rectangle {
 	return f.Rect
 }
 
-func (f *FloatNRGBA) ColorModel() color.Model {
-	return colour.FloatNRGBAModel
+func (f *Float64NRGBA) ColorModel() color.Model {
+	return colour.Float64NRGBAModel
 }
 
-func (f *FloatNRGBA) FloatNRGBAAt(x, y int) colour.FloatNRGBA {
+func (f *Float64NRGBA) Float64NRGBAAt(x, y int) colour.Float64NRGBA {
 	if !(image.Point{x, y}.In(f.Rect)) {
-		return colour.FloatNRGBA{}
+		return colour.Float64NRGBA{}
 	}
 	i := f.PixOffset(x, y)
 	s := f.Pix[i : i+numChannels : i+numChannels]
-	return colour.FloatNRGBA{R: s[0], G: s[1], B: s[2], A: s[3]}
+	return colour.Float64NRGBA{R: s[0], G: s[1], B: s[2], A: s[3]}
 }
 
 // PixOffset returns the index of the first element of Pix that corresponds to
 // the pixel at (x, y).
-func (f *FloatNRGBA) PixOffset(x, y int) int {
+func (f *Float64NRGBA) PixOffset(x, y int) int {
 	return (y-f.Rect.Min.Y)*f.Stride + (x-f.Rect.Min.X)*numChannels
 }
 
-func (f *FloatNRGBA) Set(x, y int, c color.Color) {
+func (f *Float64NRGBA) Set(x, y int, c color.Color) {
 	if !(image.Point{x, y}.In(f.Rect)) {
 		return
 	}
 	i := f.PixOffset(x, y)
-	c1 := colour.FloatNRGBAModel.Convert(c).(colour.FloatNRGBA)
+	c1 := colour.Float64NRGBAModel.Convert(c).(colour.Float64NRGBA)
 	s := f.Pix[i : i+numChannels : i+numChannels]
 	s[0] = c1.R
 	s[1] = c1.G

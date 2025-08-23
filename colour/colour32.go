@@ -1,22 +1,22 @@
-// Package colour implements a float64-based colour model.
+// Package colour implements a float32-based colour model.
 package colour
 
 import "image/color"
 
-var _ (color.Color) = (*FloatNRGBA)(nil)
+var _ (color.Color) = (*Float32NRGBA)(nil)
 
-// FloatNRGBAModel implements the colour model for FloatRGBA colour data.
-var FloatNRGBAModel color.Model = color.ModelFunc(floatNrgbaModel)
+// Float32NRGBAModel implements the colour model for Float32RGBA colour data.
+var Float32NRGBAModel color.Model = color.ModelFunc(float32NrgbaModel)
 
-// FloatNRGBA represents a non-alpha-premultiplied float64 color.
-type FloatNRGBA struct {
-	R float64
-	G float64
-	B float64
-	A float64
+// Float32NRGBA represents a non-alpha-premultiplied float32 color.
+type Float32NRGBA struct {
+	R float32
+	G float32
+	B float32
+	A float32
 }
 
-func (c FloatNRGBA) RGBA() (r, g, b, a uint32) {
+func (c Float32NRGBA) RGBA() (r, g, b, a uint32) {
 	r = uint32(c.R * 255.0)
 	r |= r << 8
 	r *= uint32(c.A * 255.0)
@@ -34,8 +34,8 @@ func (c FloatNRGBA) RGBA() (r, g, b, a uint32) {
 	return
 }
 
-func floatNrgbaModel(c color.Color) color.Color {
-	if _, ok := c.(FloatNRGBA); ok {
+func float32NrgbaModel(c color.Color) color.Color {
+	if _, ok := c.(Float32NRGBA); ok {
 		return c
 	}
 
